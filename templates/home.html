@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <title>Home</title>
+
+  <link type="text/css" rel="stylesheet" href=" {{ url_for('static', filename='style.css') }} "  />
+ 
+  </head>
+
+
+
+    <body onload="initialize()">
+
+
+        <table>
+            <tr>
+              <th>ID</th> <th>Lattitude</th> <th>Longitude</th> <th>Date</th> <th>Category</th> <th>Description</th> <th>Updated At</th>
+            
+            </tr>
+            
+            
+        </table>
+        
+        <div id="newcrimeform">
+          <h2>Submit new Crime</h2>
+
+          {% if error_msg %}
+          <div id="error"> <p>{{ error_msg }}</p> </div>
+            
+          {% endif %}
+
+
+        </div>
+            
+        <form  action="/submitcrime" method="POST">
+          <label for="category">category </label>
+          <select name="category" id="category">
+              {% for category in categories  %}
+            
+      
+                <option value="{{ category }}" > {{ category }}  </option>
+              {% endfor %}
+          </select>
+      
+          <label for="date">Date</label>
+          <input name="date" id="date" type="date" value="2020-09-11">
+          <label for="latitude">Lattitude </label>
+          <input name="latitude" id="latitude" type="text"> 
+          <label for="longitude">longitude</label>
+          <input name="longitude" id="longitude" type="text">
+          <label for="description">Description</label>
+          <textarea name="description" id="description" placeholder="Detailed Description of the Crime" > </textarea>
+          <input type="submit" value="submit">
+      </form>
+
+        <!-- <div id="map-canvas" style="width:80%; height:500px;"></div> -->
+
+        <iframe
+            width="600"
+            height="450"
+            frameborder="0" style="border:0"
+            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDQ4N5IuJnVknSMLxO2ZO4rOujEKJHjVrw
+                &q=Space+Needle,Seattle+WA" allowfullscreen>
+        </iframe>
+
+        
+    </body>
+</html>
+
