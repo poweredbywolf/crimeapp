@@ -7,14 +7,14 @@ import json
 import string
 
 
-
+import config
 
 app = Flask(__name__)
 
 DB = DBHelper()
 categories = ['mugging', 'break-in']
 crimes = ['assault', 'other']
-
+maps_api_key = config.maps_api_key
 #-------------------------
 # Functions
 #-------------------------
@@ -43,7 +43,7 @@ def home(error_msg=None):
         crimes = json.dumps(crimes)
     except Exception as e:
         print(e)
-    return render_template("home.html", crimes=crimes, categories=categories, error_msg=error_msg)
+    return render_template("home.html", crimes=crimes, categories=categories, error_msg=error_msg, maps_api_key=maps_api_key)
 
 
 @app.route('/add', methods=['POST'])
@@ -88,16 +88,16 @@ def submitcrime():
 # --------------------------------------------------------------------
 @app.route('/mapjs')
 def mapjs():
-    return render_template('mapJS.html', crimes=crimes, categories=categories)
+    return render_template('mapJS.html', crimes=crimes, categories=categories, maps_api_key=maps_api_key)
 
 @app.route('/mapclick')
 def mapClick():
-    return render_template('mapclick.html')
+    return render_template('mapclick.html', maps_api_key=maps_api_key)
 
 
 @app.route('/geo')
 def geo():
-    return render_template('mapsGeo.html')
+    return render_template('mapsGeo.html', maps_api_key=maps_api_key)
 
 
 
@@ -105,5 +105,5 @@ def geo():
 
 
 if __name__ == '__main__':
-    app.run(port=5001, debug=True)
+    app.run(port=5000, debug=True)
     

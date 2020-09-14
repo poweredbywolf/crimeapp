@@ -2,3 +2,5 @@ dbconfig.py
 *.pyc
 
 forReference.txt
+
+config.py
