@@ -1,5 +1,7 @@
 import pymysql
-import dbconfig
+import config
+
+config = config.Config()
 
 class DBHelper:
     ''' CRUD
@@ -8,8 +10,8 @@ class DBHelper:
 
     def connect(self, database="crimemap"):
         return pymysql.connect(host='localhost',
-                user=dbconfig.db_user,
-                passwd=dbconfig.db_password,
+                user=config.db_user,
+                passwd=config.db_password,
                 db=database)
 
     def get_all_inputs(self):
