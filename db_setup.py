@@ -24,8 +24,8 @@ else:
         # so that your application can use 127.0.0.1:3306 to connect to your
         # Cloud SQL instance
         host = '127.0.0.1'
-        db_user = 'z_sql'
-        db_password = 'Guitar1!'
+        db_user = ''
+        db_password = ''
         port = 3307
         cnx = pymysql.connect(user=db_user, port=port, password=db_password,
                                 host=host)
