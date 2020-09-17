@@ -1,7 +1,4 @@
 
-
-
-
 from dbhelper import DBHelper
 from flask import render_template, request
 import datetime
@@ -13,11 +10,13 @@ import string
 import config
 from applications import app
 
+import dbhelper
 
+print('about to instantiate DB')
 DB = DBHelper()
-categories = ['mugging', 'break-in']
-crimes = ['assault', 'other']
+categories = ['assault', 'CIT', 'domestic']
 maps_api_key = config.maps_api_key
+
 #-------------------------
 # Functions
 #-------------------------
@@ -39,7 +38,6 @@ def sanitize_string(userinput):
 
 @app.route('/')
 def home(error_msg=None):
-    print('I am at home function')
     try:
         crimes = DB.get_all_crimes()
         crimes = json.dumps(crimes)
@@ -84,13 +82,18 @@ def submitcrime():
     print('Type',type(description))
     print(description)
     DB.add_crime(category, date, latitude, longitude, description)
-    return mapjs()
+    return home()
 
 
 # --------------------------------------------------------------------
 @app.route('/mapjs')
 def mapjs():
-    return render_template('mapJS.html', crimes=crimes, categories=categories, maps_api_key=maps_api_key)
+    try:
+        crimes = DB.get_all_crimes()
+        crimes = json.dumps(crimes)
+    except Exception as e:
+        print(e)
+    return render_template('home.html', crimes=crimes, categories=categories, maps_api_key=maps_api_key)
 
 @app.route('/mapclick')
 def mapClick():
