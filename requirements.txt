@@ -2,6 +2,8 @@ astroid==2.4.2
 click==7.1.2
 dateparser==0.7.6
 Flask==1.1.2
+Flask-Environments==0.1
+gunicorn==20.0.4
 isort==4.3.21
 itsdangerous==1.1.0
 Jinja2==2.11.2
@@ -13,6 +15,7 @@ pylint==2.5.3
 PyMySQL==0.10.0
 python-dateutil==2.8.1
 pytz==2020.1
+PyYAML==5.3.1
 regex==2020.7.14
 six==1.15.0
 toml==0.10.1

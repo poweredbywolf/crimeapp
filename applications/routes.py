@@ -5,7 +5,7 @@ import datetime
 import dateparser
 import json
 import string
-
+import os
 
 import config
 from applications import app
@@ -15,7 +15,7 @@ import dbhelper
 print('about to instantiate DB')
 DB = DBHelper()
 categories = ['assault', 'CIT', 'domestic']
-maps_api_key = config.maps_api_key
+maps_api_key = os.environ.get('maps_api_key')
 
 #-------------------------
 # Functions
