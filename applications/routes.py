@@ -15,7 +15,9 @@ import dbhelper
 print('about to instantiate DB')
 DB = DBHelper()
 categories = ['assault', 'CIT', 'domestic']
-maps_api_key = os.environ.get('maps_api_key')
+
+maps_api_key = os.environ.get('maps_api_key') 
+# maps_api_key = ''
 
 #-------------------------
 # Functions
@@ -37,13 +39,19 @@ def sanitize_string(userinput):
 #-------------------------
 
 @app.route('/')
-def home(error_msg=None):
+def home():
+    
+    return render_template('index.html', maps_api_key=maps_api_key)
+
+@app.route('/dashboard')
+def dashboard(error_msg=None):
     try:
+        crimes = {'id':'dummy','latitude':'0', 'longitude':'0', 'category': 'assault', 'description': 'dummy data'}
         crimes = DB.get_all_crimes()
         crimes = json.dumps(crimes)
     except Exception as e:
         print(e)
-    return render_template("home.html", crimes=crimes, categories=categories, error_msg=error_msg, maps_api_key=maps_api_key)
+    return render_template("dashboard.html", crimes=crimes, categories=categories, error_msg=error_msg, maps_api_key=maps_api_key)
 
 
 @app.route('/add', methods=['POST'])
@@ -53,7 +61,7 @@ def add():
         DB.add_input(data)
     except Exception as e:
         print(e)
-    return home()
+    return dashboard()
 
 @app.route('/clear', methods=['POST'])
 def clear():
