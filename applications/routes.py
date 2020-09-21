@@ -7,17 +7,20 @@ import json
 import string
 import os
 
-import config
 from applications import app
+from configuration import Configuration
+
 
 import dbhelper
+
+conf = Configuration()
 
 print('about to instantiate DB')
 DB = DBHelper()
 categories = ['assault', 'CIT', 'domestic']
 
-maps_api_key = os.environ.get('maps_api_key') 
-# maps_api_key = ''
+
+maps_api_key = conf.MAPS_API_K
 
 #-------------------------
 # Functions

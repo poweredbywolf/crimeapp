@@ -1,16 +1,16 @@
 import pymysql
+import config
 import os
 
-import configuration
+config = config.Dev_Cloud()
 
-conf = configuration.Configuration()
 
-DB_CONNECTION_NAME = conf.DB_CONNECTION_NAME
-DB_HOST  = conf.DB_HOST
-DB_USER  = conf.DB_USER
-DB_PW = conf.DB_PW
-DATABASE = conf.DATABASE
-PORT = conf.PORT
+host = config.host
+db_user = config.db_user
+db_password = config.db_password
+port = config.port
+
+
 
 #---------------GOOGLE CLOUD MYSQL -----------
 # When deployed to App Engine, the `GAE_ENV` environment variable will be
@@ -23,17 +23,21 @@ class DBHelper:
 
     def connect(self, db_name="crimemap"):
         if os.environ.get('GAE_ENV') == 'standard':
+                db_user = os.environ.get('CLOUD_SQL_USERNAME')
+                db_password = os.environ.get('CLOUD_SQL_PASSWORD')
+                db_name = os.environ.get('CLOUD_SQL_DATABASE_NAME')
+                db_connection_name = os.environ.get('CLOUD_SQL_CONNECTION_NAME')
                 # If deployed, use the local socket interface for accessing Cloud SQL
-                unix_socket = '/cloudsql/{}'.format(DB_CONNECTION_NAME)
-                cnx = pymysql.connect(user=DB_USER, password=DB_PW,
-                                        unix_socket=unix_socket, db=DATABASE)
+                unix_socket = '/cloudsql/{}'.format(db_connection_name)
+                cnx = pymysql.connect(user=db_user, password=db_password,
+                                        unix_socket=unix_socket, db=db_name)
         else:
                 # If running locally, use the TCP connections instead
                 # Set up Cloud SQL Proxy (cloud.google.com/sql/docs/mysql/sql-proxy)
                 # so that your application can use 127.0.0.1:3306 to connect to your
                 # Cloud SQL instance
-                cnx = pymysql.connect(user=DB_USER, port=PORT, password=DB_PW,
-                                        host=DB_HOST, db=DATABASE)
+                cnx = pymysql.connect(user=db_user, port=port, password=db_password,
+                                        host=host, db=db_name)
                 return cnx
 
         with cnx.cursor() as cursor:
@@ -44,6 +48,12 @@ class DBHelper:
     #---------------END GOOGLE CLOUD MYSQL -----------
 
 
+
+    # def connect(self, database="crimemap"):
+    #     return pymysql.connect(host='localhost',
+    #             user=config.db_user,
+    #             passwd=config.db_password,
+    #             db=database)
 
 
     def add_crime(self, category, date, latitude, longitude, description):
@@ -93,3 +103,4 @@ class DBHelper:
                 connection.commit()
         finally:
             connection.close()
+
