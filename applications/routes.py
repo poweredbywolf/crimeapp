@@ -8,19 +8,19 @@ import string
 import os
 
 from applications import app
-from configuration import Configuration
+# from configuration import Configuration
 
 
 import dbhelper
 
-conf = Configuration()
+# conf = Configuration()
 
 print('about to instantiate DB')
 DB = DBHelper()
 categories = ['assault', 'CIT', 'domestic']
 
 
-maps_api_key = conf.MAPS_API_K
+maps_api_key = os.environ.get('MAPS_API_K')
 
 #-------------------------
 # Functions
@@ -43,7 +43,7 @@ def sanitize_string(userinput):
 
 @app.route('/')
 def home():
-    
+    print('static folder being served from:',app.static_folder)
     return render_template('index.html', maps_api_key=maps_api_key)
 
 @app.route('/dashboard')
@@ -94,6 +94,11 @@ def submitcrime():
     print(description)
     DB.add_crime(category, date, latitude, longitude, description)
     return home()
+
+
+@app.route('/admin')
+def admin():
+    return render_template('admin.html')
 
 
 # --------------------------------------------------------------------

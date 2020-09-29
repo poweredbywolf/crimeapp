@@ -1,16 +1,25 @@
 import pymysql
-import os
+from os import environ
 
-import configuration
+# import configuration
 
-conf = configuration.Configuration()
+# conf = configuration.Configuration()
 
-DB_CONNECTION_NAME = conf.DB_CONNECTION_NAME
-DB_HOST  = conf.DB_HOST
-DB_USER  = conf.DB_USER
-DB_PW = conf.DB_PW
-DATABASE = conf.DATABASE
-PORT = conf.PORT
+# DB_CONNECTION_NAME = conf.DB_CONNECTION_NAME
+# DB_HOST  = conf.DB_HOST
+# DB_USER  = conf.DB_USER
+# DB_PW = conf.DB_PW
+# DATABASE = conf.DATABASE
+# PORT = conf.PORT
+
+DB_CONNECTION_NAME = environ.get('DB_CONNECTION_NAME') #when deployed it uses the uniqe connection name and not an IP address
+DB_HOST = environ.get('DB_HOST')
+DB_USER = environ.get('DB_USER')
+DB_PW = environ.get('DB_PW')
+DATABASE = environ.get('DATABASE')
+DB_PORT = int(environ.get('DB_PORT'))
+
+
 
 #---------------GOOGLE CLOUD MYSQL -----------
 # When deployed to App Engine, the `GAE_ENV` environment variable will be
@@ -22,7 +31,7 @@ class DBHelper:
         '''
 
     def connect(self, db_name="crimemap"):
-        if os.environ.get('GAE_ENV') == 'standard':
+        if environ.get('GAE_ENV') == 'standard':
                 # If deployed, use the local socket interface for accessing Cloud SQL
                 unix_socket = '/cloudsql/{}'.format(DB_CONNECTION_NAME)
                 cnx = pymysql.connect(user=DB_USER, password=DB_PW,
@@ -32,7 +41,7 @@ class DBHelper:
                 # Set up Cloud SQL Proxy (cloud.google.com/sql/docs/mysql/sql-proxy)
                 # so that your application can use 127.0.0.1:3306 to connect to your
                 # Cloud SQL instance
-                cnx = pymysql.connect(user=DB_USER, port=PORT, password=DB_PW,
+                cnx = pymysql.connect(user=DB_USER, port=DB_PORT, password=DB_PW,
                                         host=DB_HOST, db=DATABASE)
                 return cnx
 
