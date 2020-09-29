@@ -20,7 +20,6 @@ DATABASE = environ.get('DATABASE')
 DB_PORT = int(environ.get('DB_PORT'))
 
 
-
 #---------------GOOGLE CLOUD MYSQL -----------
 # When deployed to App Engine, the `GAE_ENV` environment variable will be
 # set to `standard`
@@ -43,7 +42,7 @@ class DBHelper:
                 # Cloud SQL instance
                 cnx = pymysql.connect(user=DB_USER, port=DB_PORT, password=DB_PW,
                                         host=DB_HOST, db=DATABASE)
-                return cnx
+        return cnx
 
         with cnx.cursor() as cursor:
                 cursor.execute('SELECT NOW() as now;')
